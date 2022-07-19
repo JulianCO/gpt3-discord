@@ -3,6 +3,7 @@ use reqwest::{
     Client,
 };
 use serde::{Deserialize, Serialize};
+use serde_json::{to_string_pretty, Value};
 use std::env;
 
 static OPENAI_URL: &str = "https://api.openai.com/v1/completions";
@@ -11,8 +12,28 @@ static OPENAI_URL: &str = "https://api.openai.com/v1/completions";
 struct GPTParameters {
     model: String,
     prompt: String,
-    temperature: u32,
+    temperature: f32,
     max_tokens: u32,
+}
+
+#[derive(Serialize, Deserialize)]
+struct GPTResponse {
+    choices: Vec<GPTChoice>,
+    usage: GPTUsageStats,
+}
+
+#[derive(Serialize, Deserialize)]
+struct GPTChoice {
+    text: String,
+    index: u32,
+    finish_reason: String,
+}
+
+#[derive(Serialize, Deserialize)]
+struct GPTUsageStats {
+    prompt_tokens: u32,
+    completion_tokens: u32,
+    total_tokens: u32,
 }
 
 #[tokio::main]
@@ -24,9 +45,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let request_parameters = GPTParameters {
         model: "text-davinci-002".to_string(),
-        prompt: "Say this is a test".to_string(),
-        temperature: 0,
-        max_tokens: 6,
+        prompt: "Tell me about your favorite author".to_string(),
+        temperature: 0.7,
+        max_tokens: 15,
     };
 
     let request = client
@@ -35,11 +56,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .header(AUTHORIZATION, format!("Bearer {}", api_key))
         .json(&request_parameters);
 
-    println!("Request: {:?}", &request);
+    let res: GPTResponse = request.send().await?.json().await?;
 
-    let res = request.send().await?;
-
-    println!("Response: {:?}", &res.text().await?);
+    println!("Response: {}", to_string_pretty(&res)?);
 
     Ok(())
 }
