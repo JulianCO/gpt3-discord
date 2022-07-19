@@ -1,4 +1,4 @@
-.PHONY = build-image
+.PHONY = build-image run
 
 build-image:
 	docker build -t gpt3-discord .
