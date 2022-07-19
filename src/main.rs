@@ -8,7 +8,7 @@ use reqwest::{
     header::{AUTHORIZATION, CONTENT_TYPE},
     Client,
 };
-use serde_json::to_string_pretty;
+
 use std::env;
 
 use openai::{GPTParameters, GPTResponse};
@@ -62,11 +62,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .json(&request_parameters);
                     let res: GPTResponse = request.send().await?.json().await?;
 
-                    let pretty_printed = to_string_pretty(&res)?;
-
                     let _ = discord_api.send_message(
                         message.channel_id,
-                        &format!("```{pretty_printed}```"),
+                        &format!("```{}```", res.choices[0].text),
                         "",
                         false,
                     );

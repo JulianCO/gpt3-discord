@@ -10,20 +10,20 @@ pub struct GPTParameters {
 
 #[derive(Serialize, Deserialize)]
 pub struct GPTResponse {
-    choices: Vec<GPTChoice>,
-    usage: GPTUsageStats,
+    pub choices: Vec<GPTChoice>,
+    pub usage: GPTUsageStats,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct GPTChoice {
-    text: String,
-    index: u32,
-    finish_reason: String,
+    pub text: String,
+    pub index: u32,
+    pub finish_reason: String,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct GPTUsageStats {
-    prompt_tokens: u32,
-    completion_tokens: u32,
-    total_tokens: u32,
+    pub prompt_tokens: u32,
+    pub completion_tokens: u32,
+    pub total_tokens: u32,
 }
