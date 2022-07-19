@@ -1,3 +1,4 @@
 /target
-openaitoken
-discordtoken
+/openaitoken
+/discordtoken
+/.vscode
