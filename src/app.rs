@@ -8,7 +8,6 @@ use discord::{
 use reqwest::header::{self, AUTHORIZATION};
 
 use reqwest::blocking::Client;
-use serde_json::to_string_pretty;
 
 use error::AppError;
 use openai::{GPTParameters, GPTResponse, OPENAI_URL};
@@ -90,13 +89,8 @@ impl App {
                         IncomingRequest::OpenAIComplete { prompt } => {
                             let request_parameters = GPTParameters::new(&prompt, 50);
                             let request = openai_client.post(OPENAI_URL).json(&request_parameters);
-                            let server_res = request.send()?;
-                            println!("{server_res:?}");
-                            let response_text: serde_json::Value =
-                                serde_json::from_str(&server_res.text()?)?;
-                            println!("{}", to_string_pretty(&response_text)?);
 
-                            let res: GPTResponse = serde_json::from_value(response_text)?;
+                            let res: GPTResponse = request.send()?.json()?;
 
                             let _ = discord_api.send_message(
                                 message.channel_id,
