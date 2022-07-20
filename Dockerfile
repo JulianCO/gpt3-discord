@@ -1,6 +1,15 @@
 FROM rust:1.62-buster as builder
+WORKDIR /usr/src/
+# create blank project
+RUN USER=root cargo new gpt3-discord
 WORKDIR /usr/src/gpt3-discord
-COPY . .
+
+# Dummy build to cache dependencies
+COPY Cargo.toml .
+COPY Cargo.lock .
+RUN cargo build --release
+
+COPY ./src ./src
 RUN cargo install --path .
 
 FROM debian:buster-slim
