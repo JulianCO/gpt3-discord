@@ -4,10 +4,9 @@ use discord::{
     model::{Event, Message},
     Discord,
 };
-use reqwest::{
-    header::{AUTHORIZATION, CONTENT_TYPE},
-    Client,
-};
+use reqwest::header::{AUTHORIZATION, CONTENT_TYPE};
+
+use reqwest::blocking::Client;
 
 use std::{env, fs};
 
@@ -31,8 +30,7 @@ fn parse_message(message: &Message) -> IncomingRequest {
     }
 }
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let openai_key_file = env::var("OPENAI_KEY_FILE")
         .expect("Set the environment variable OPENAI_KEY_FILE to use for this bot");
 
@@ -68,7 +66,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .header(CONTENT_TYPE, "application/json")
                         .header(AUTHORIZATION, format!("Bearer {}", openai_key))
                         .json(&request_parameters);
-                    let res: GPTResponse = request.send().await?.json().await?;
+                    let res: GPTResponse = request.send()?.json()?;
 
                     let _ = discord_api.send_message(
                         message.channel_id,
