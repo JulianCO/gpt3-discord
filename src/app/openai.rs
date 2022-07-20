@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+pub static OPENAI_URL: &str = "https://api.openai.com/v1/completions";
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct GPTParameters {
     pub model: String,
