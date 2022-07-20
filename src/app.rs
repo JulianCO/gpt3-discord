@@ -51,7 +51,7 @@ impl App {
     }
 
     fn establish_discord_connection(&mut self) -> Result<(), AppError> {
-        let discord_api = Discord::from_bot_token(&&self.discord_token)?;
+        let discord_api = Discord::from_bot_token(&self.discord_token)?;
 
         let (discord_conn, _) = discord_api.connect()?;
 
