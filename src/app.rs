@@ -79,8 +79,8 @@ impl App {
 
     pub fn main_loop(&mut self) -> Result<(), AppError> {
         if let (Some(openai_client), Some(discord_api), Some(discord_conn)) = (
-            &mut self.openai_client,
-            &mut self.discord_api,
+            &self.openai_client,
+            &self.discord_api,
             &mut self.discord_conn,
         ) {
             loop {
