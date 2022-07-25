@@ -10,7 +10,7 @@ COPY Cargo.lock .
 RUN cargo build --release
 
 COPY ./src ./src
-RUN cargo install --path .
+RUN cargo install --path . --locked --offline
 
 FROM debian:buster-slim
 RUN apt-get update && apt-get install -y libssl1.1 ca-certificates && rm -rf /var/lib/apt/lists/*
