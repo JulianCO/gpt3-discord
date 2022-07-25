@@ -6,7 +6,6 @@ pub enum AppError {
     DiscordError(discord::Error),
     SerdeJsonError(serde_json::Error),
     InvalidAuthHeader,
-    Uninitialized,
 }
 
 impl fmt::Display for AppError {
@@ -14,7 +13,6 @@ impl fmt::Display for AppError {
         match self {
             AppError::ReqwestError(e) => write!(f, "error with reqwest: {e}"),
             AppError::DiscordError(e) => write!(f, "error with discord-rs: {e}"),
-            AppError::Uninitialized => write!(f, "Uninitialized connections within main_loop"),
             AppError::InvalidAuthHeader => write!(f, "Problem when setting Authorization header"),
             AppError::SerdeJsonError(e) => write!(f, "error while parsing or generating json: {e}"),
         }
